@@ -3,7 +3,7 @@
 
 Name:             redis
 Version:          2.0.3
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
@@ -75,7 +75,7 @@ rm -fr %{buildroot}
 %pre
 getent group redis &> /dev/null || groupadd -r redis &> /dev/null
 getent passwd redis &> /dev/null || \
-useradd -r -g redis -d %{_sharedstatedir}/redis -s /sbin/nologin \
+useradd -r -g redis -d %{_localstatedir}/lib/redis -s /sbin/nologin \
 -c 'Redis Server' redis &> /dev/null
 exit 0
 
@@ -98,6 +98,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Tue Nov 02 2010 Silas Sewell <silas@sewell.ch> - 2.0.3-2
+- Use legacy macro for redis home directory in el5
+
 * Tue Oct 19 2010 Silas Sewell <silas@sewell.ch> - 2.0.3-1
 - Update to redis 2.0.3
 
