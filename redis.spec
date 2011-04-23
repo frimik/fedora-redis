@@ -3,7 +3,7 @@
 
 Name:             redis
 Version:          2.2.5
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
@@ -17,7 +17,6 @@ Patch0:           %{name}-2.2.2-redis.conf.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    tcl >= 8.5
-BuildRequires:    google-perftools-devel
 
 Requires:         logrotate
 Requires(post):   chkconfig
@@ -42,7 +41,6 @@ different kind of sorting abilities.
 make %{?_smp_mflags} \
   DEBUG="" \
   CFLAGS='%{optflags} -std=c99' \
-  USE_TCMALLOC=yes \
   all
 
 %check
@@ -98,6 +96,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Sat Apr 23 2011 Silas Sewell <silas@sewell.ch> - 2.2.5-2
+- Remove google-perftools-devel
+
 * Sat Apr 23 2011 Silas Sewell <silas@sewell.ch> - 2.2.5-1
 - Update to redis 2.2.5
 
