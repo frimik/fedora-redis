@@ -2,18 +2,18 @@
 # http://code.google.com/p/redis/issues/detail?id=202
 
 Name:             redis
-Version:          2.2.5
-Release:          2%{?dist}
+Version:          2.4.8
+Release:          1%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
 License:          BSD
-URL:              http://code.google.com/p/redis/
+URL:              http://redis.io
 Source0:          http://redis.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:          %{name}.logrotate
 Source2:          %{name}.init
-# Update configuration for Fedora
-Patch0:           %{name}-2.2.2-redis.conf.patch
+# Update configuration
+Patch0:           %{name}-2.4.8-redis.conf.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    tcl >= 8.5
@@ -40,11 +40,11 @@ different kind of sorting abilities.
 %build
 make %{?_smp_mflags} \
   DEBUG="" \
-  CFLAGS='%{optflags} -std=c99' \
+  CFLAGS='%{optflags}' \
   all
 
 %check
-# make test
+make test
 
 %install
 rm -fr %{buildroot}
@@ -85,7 +85,7 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc 00-RELEASENOTES BUGS COPYING Changelog README doc/
+%doc 00-RELEASENOTES BUGS CONTRIBUTING COPYING README TODO
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %dir %attr(0755, redis, root) %{_localstatedir}/lib/%{name}
@@ -96,6 +96,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-1
+- Update to redis 2.4.8
+
 * Sat Apr 23 2011 Silas Sewell <silas@sewell.ch> - 2.2.5-2
 - Remove google-perftools-devel
 
