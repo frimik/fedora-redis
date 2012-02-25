@@ -2,23 +2,21 @@
 # http://code.google.com/p/redis/issues/detail?id=202
 
 Name:             redis
-Version:          2.0.3
-Release:          2%{?dist}
+Version:          2.4.8
+Release:          1%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
 License:          BSD
-URL:              http://code.google.com/p/redis/
+URL:              http://redis.io
 Source0:          http://redis.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:          %{name}.logrotate
 Source2:          %{name}.init
-# Update configuration for Fedora
-Patch0:           %{name}-2.0.0-redis.conf.patch
+# Update configuration
+Patch0:           %{name}-2.4.8-redis.conf.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-%if !0%{?el5}
-BuildRequires:    tcl >= 8.5
-%endif
+ExcludeArch:      ppc64
 
 Requires:         logrotate
 Requires(post):   chkconfig
@@ -38,26 +36,17 @@ different kind of sorting abilities.
 %prep
 %setup -q
 %patch0 -p1
-# Remove integration tests
-sed -i '/    execute_tests "integration\/replication"/d' tests/test_helper.tcl
-sed -i '/    execute_tests "integration\/aof"/d' tests/test_helper.tcl
 
 %build
-make %{?_smp_mflags} DEBUG="" CFLAGS='%{optflags} -std=c99' all
-
-%check
-%if !0%{?el5}
-tclsh tests/test_helper.tcl
-%endif
+make %{?_smp_mflags} \
+  DEBUG='' \
+  CFLAGS='%{optflags}' \
+  V=1 \
+  all
 
 %install
 rm -fr %{buildroot}
-# Install binaries
-install -p -D -m 755 %{name}-benchmark %{buildroot}%{_bindir}/%{name}-benchmark
-install -p -D -m 755 %{name}-cli %{buildroot}%{_bindir}/%{name}-cli
-install -p -D -m 755 %{name}-check-aof %{buildroot}%{_bindir}/%{name}-check-aof
-install -p -D -m 755 %{name}-check-dump %{buildroot}%{_bindir}/%{name}-check-dump
-install -p -D -m 755 %{name}-server %{buildroot}%{_sbindir}/%{name}-server
+make install PREFIX=%{buildroot}%{_prefix}
 # Install misc other
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -p -D -m 755 %{SOURCE2} %{buildroot}%{_initrddir}/%{name}
@@ -65,6 +54,13 @@ install -p -D -m 644 %{name}.conf %{buildroot}%{_sysconfdir}/%{name}.conf
 install -d -m 755 %{buildroot}%{_localstatedir}/lib/%{name}
 install -d -m 755 %{buildroot}%{_localstatedir}/log/%{name}
 install -d -m 755 %{buildroot}%{_localstatedir}/run/%{name}
+
+# Fix non-standard-executable-perm error
+chmod 755 %{buildroot}%{_bindir}/%{name}-*
+
+# Ensure redis-server location doesn't change
+mkdir -p %{buildroot}%{_sbindir}
+mv %{buildroot}%{_bindir}/%{name}-server %{buildroot}%{_sbindir}/%{name}-server
 
 %clean
 rm -fr %{buildroot}
@@ -87,7 +83,7 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc 00-RELEASENOTES BUGS COPYING Changelog README TODO doc/
+%doc 00-RELEASENOTES BUGS CONTRIBUTING COPYING README TODO
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %dir %attr(0755, redis, root) %{_localstatedir}/lib/%{name}
@@ -98,6 +94,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-1
+- Update to redis 2.4.8
+
 * Tue Nov 02 2010 Silas Sewell <silas@sewell.ch> - 2.0.3-2
 - Use legacy macro for redis home directory in el5
 
