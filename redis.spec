@@ -3,7 +3,7 @@
 
 Name:             redis
 Version:          2.4.8
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
@@ -17,6 +17,8 @@ Patch0:           %{name}-2.4.8-redis.conf.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    tcl >= 8.5
+
+ExcludeArch:      ppc64
 
 Requires:         logrotate
 Requires(post):   chkconfig
@@ -39,8 +41,9 @@ different kind of sorting abilities.
 
 %build
 make %{?_smp_mflags} \
-  DEBUG="" \
+  DEBUG='' \
   CFLAGS='%{optflags}' \
+  V=1 \
   all
 
 %check
@@ -96,6 +99,10 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-2
+- Disable ppc64 for now
+- Enable verbose builds
+
 * Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-1
 - Update to redis 2.4.8
 
