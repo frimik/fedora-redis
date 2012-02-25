@@ -3,7 +3,7 @@
 
 Name:             redis
 Version:          2.4.8
-Release:          1%{?dist}
+Release:          2%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
@@ -16,7 +16,7 @@ Source2:          %{name}.init
 Patch0:           %{name}-2.4.8-redis.conf.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-ExcludeArch:      ppc64
+ExcludeArch:      ppc ppc64
 
 Requires:         logrotate
 Requires(post):   chkconfig
@@ -94,6 +94,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-2
+- Disable ppc for now
+
 * Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-1
 - Update to redis 2.4.8
 
