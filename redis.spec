@@ -8,7 +8,7 @@
 
 Name:             redis
 Version:          2.2.5
-Release:          2%{?dist}
+Release:          2%{?dist}.1
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
@@ -23,7 +23,7 @@ Patch0:           %{name}-2.2.2-redis.conf.patch
 %if !0%{?el5}
 BuildRequires:    tcl >= 8.5
 %if 0%{?with_perftools}
-BuildRequires:    google-perftools-devel
+BuildRequires:    gperftools-devel
 %endif
 %endif
 
@@ -108,6 +108,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Tue Mar 13 2012 Tom Callaway <spot@fedoraproject.org> - 2.2.5-2.1
+- rebuild against gperftools
+
 * Fri May 06 2011 Dan Horák <dan[at]danny.cz> - 2.2.5-2
 - google-perftools exists only on selected architectures
 
