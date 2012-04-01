@@ -2,8 +2,8 @@
 # http://code.google.com/p/redis/issues/detail?id=202
 
 Name:             redis
-Version:          2.4.8
-Release:          2%{?dist}
+Version:          2.4.10
+Release:          1%{?dist}
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
@@ -99,6 +99,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Sat Mar 31 2012 Silas Sewell <silas@sewell.org> - 2.4.10-1
+- Update to redis 2.4.10
+
 * Fri Feb 24 2012 Silas Sewell <silas@sewell.org> - 2.4.8-2
 - Disable ppc64 for now
 - Enable verbose builds
