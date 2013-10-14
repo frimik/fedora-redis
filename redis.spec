@@ -2,7 +2,7 @@
 # http://code.google.com/p/redis/issues/detail?id=202
 
 Name:             redis
-Version:          2.4.13
+Version:          2.6.16
 Release:          1%{?dist}
 Summary:          A persistent key-value database
 
@@ -13,7 +13,7 @@ Source0:          http://redis.googlecode.com/files/%{name}-%{version}.tar.gz
 Source1:          %{name}.logrotate
 Source2:          %{name}.init
 # Update configuration
-Patch0:           %{name}-2.4.8-redis.conf.patch
+Patch0:           %{name}-2.6.13-redis.conf.patch
 BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:    tcl >= 8.5
@@ -88,7 +88,7 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc 00-RELEASENOTES BUGS CONTRIBUTING COPYING README TODO
+%doc 00-RELEASENOTES BUGS CONTRIBUTING COPYING README
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}.conf
 %dir %attr(0755, redis, root) %{_localstatedir}/lib/%{name}
@@ -99,6 +99,9 @@ fi
 %{_initrddir}/%{name}
 
 %changelog
+* Mon Oct 14 2013 Mikael Fridh <mfridh@ea.com> - 2.6.16-1
+- Redis 2.6.16
+
 * Sat May 19 2012 Silas Sewell <silas@sewell.org> - 2.4.13-1
 - Update to redis 2.4.13
 
